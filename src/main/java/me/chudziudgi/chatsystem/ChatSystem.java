@@ -12,7 +12,6 @@ public class ChatSystem extends JavaPlugin {
     public static ChatSystem getInstance() {
         return instance;
     }
-
     @Override
     public void onEnable() {
         instance = this;

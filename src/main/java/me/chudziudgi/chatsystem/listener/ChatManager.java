@@ -38,7 +38,7 @@ public class ChatManager implements Listener {
             }
             if (lastMessages.containsKey(player) && lastMessages.get(player).equals(message)) {
                 event.setCancelled(true);
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.format(ChatSystem.getInstance().getChatLastMessage(), true)));
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.format(ChatSystem.getInstance().getChatLastMessage(), false)));
                 player.playSound(player.getLocation(), Sound.ENTITY_RABBIT_ATTACK, 1.0F, 1.0F);
                 return;
             }
@@ -60,7 +60,7 @@ public class ChatManager implements Listener {
             lastMessages.put(player, message);
         } else {
             event.setCancelled(true);
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.format(ChatSystem.getInstance().getChatManagerCurrentlyOffline(), true)));
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.format(ChatSystem.getInstance().getChatManagerCurrentlyOffline(), false)));
         }
     }
 

@@ -2,6 +2,7 @@ name: ChatSystem
 version: '${version}'
 main: me.chudziudgi.chatsystem.ChatSystem
 author: 'discord: Chudziudgi'
+description: 'github: https://github.com/ChudziudgiToJa/ChatSystem'
 api-version: '1.19'
 commands:
   chat:

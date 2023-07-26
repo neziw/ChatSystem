@@ -16,9 +16,6 @@ public class ChatCommand implements CommandExecutor {
                 player.sendMessage(Utils.format(ChatSystem.getInstance().getChatNoPerm(), false));
                 return true;
             }
-            if (player.hasPermission("system.chat")) {
-                return true;
-            }
             if (command.getName().equalsIgnoreCase("chat")) {
                 if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("on")) {
