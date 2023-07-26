@@ -22,8 +22,9 @@ It's worth noting that different server types (e.g., Spigot, Bukkit, PaperMC) ma
 
 ## short video
 (https://streamable.com/p43yeu)
+
 ## Download
-  - [Relese]([https://awesomeopensource.com/project/elangosundar/awesome-README-templates](https://github.com/ChudziudgiToJa/ChatSystem/releases/download/plugin/ChatSystem-0.1.jar)https://github.com/ChudziudgiToJa/ChatSystem/releases/download/plugin/ChatSystem-0.1.jar)
+- [Relese](https://github.com/ChudziudgiToJa/ChatSystem/releases/download/plugin/ChatSystem-0.1.jar)
 
 ## Authors
 
