@@ -24,7 +24,7 @@ It's worth noting that different server types (e.g., Spigot, Bukkit, PaperMC) ma
 (https://streamable.com/p43yeu)
 
 ## Download
-- [Relese](https://github.com/ChudziudgiToJa/ChatSystem/releases/download/plugin/ChatSystem-0.1.jar)
+- [Relese](https://github.com/ChudziudgiToJa/ChatSystem/releases/download/plugin/ChatSystem-0.2.jar)
 
 ## Authors
 
