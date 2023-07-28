@@ -1,7 +1,7 @@
 package me.chudziudgi.chatsystem.listener;
 
 import me.chudziudgi.chatsystem.ChatSystem;
-import me.chudziudgi.chatsystem.Utils;
+import me.chudziudgi.chatsystem.ColorsUtils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Sound;
@@ -26,19 +26,19 @@ public class ChatManager implements Listener {
         if (ChatSystem.getInstance().getChatStatusValue()) {
             if (ChatSystem.getInstance().getChatPremiumStatusValue() && !player.hasPermission("system.chat.premium")) {
                 event.setCancelled(true);
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.format(ChatSystem.getInstance().getChatNoPermPremium(), false)));
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ColorsUtils.format(ChatSystem.getInstance().getChatNoPermPremium())));
                 player.playSound(player.getLocation(), Sound.ENTITY_RABBIT_ATTACK, 1.0F, 1.0F);
                 return;
             }
             if (!message.equals(filteredMessage)) {
                 event.setCancelled(true);
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.format(ChatSystem.getInstance().getChatWrongMessage(), false)));
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ColorsUtils.format(ChatSystem.getInstance().getChatWrongMessage())));
                 player.playSound(player.getLocation(), Sound.ENTITY_RABBIT_ATTACK, 1.0F, 1.0F);
                 return;
             }
             if (lastMessages.containsKey(player) && lastMessages.get(player).equals(message)) {
                 event.setCancelled(true);
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.format(ChatSystem.getInstance().getChatLastMessage(), false)));
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ColorsUtils.format(ChatSystem.getInstance().getChatLastMessage())));
                 player.playSound(player.getLocation(), Sound.ENTITY_RABBIT_ATTACK, 1.0F, 1.0F);
                 return;
             }
@@ -50,7 +50,7 @@ public class ChatManager implements Listener {
                 }
                 long timeRemaining = chatCooldowns.get(playerId) - currentTime;
                 if (timeRemaining > 0) {
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.format("&cPoczekaj &6" + String.format("%.2f", (timeRemaining / 1000.0)) + "ms &cprzed następną wiadomością!", false)));
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ColorsUtils.format("&cPoczekaj &6" + String.format("%.2f", (timeRemaining / 1000.0)) + "ms &cprzed następną wiadomością!")));
                     player.playSound(player.getLocation(), Sound.ENTITY_RABBIT_ATTACK, 1.0F, 1.0F);
                     event.setCancelled(true);
                     return;
@@ -60,7 +60,7 @@ public class ChatManager implements Listener {
             lastMessages.put(player, message);
         } else {
             event.setCancelled(true);
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.format(ChatSystem.getInstance().getChatManagerCurrentlyOffline(), false)));
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ColorsUtils.format(ChatSystem.getInstance().getChatManagerCurrentlyOffline())));
         }
     }
 

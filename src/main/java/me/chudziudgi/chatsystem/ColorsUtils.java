@@ -2,9 +2,9 @@ package me.chudziudgi.chatsystem;
 
 import org.bukkit.ChatColor;
 
-public class Utils {
+public class ColorsUtils {
 
-    private static final String PREFIX = "§8[§4§l!§8] " + ChatColor.RESET;
+    private static final String PREFIX = ChatSystem.getInstance().getChatPrefix() + ChatColor.RESET;
 
     public static String colorize(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
@@ -14,8 +14,8 @@ public class Utils {
         return PREFIX + message;
     }
 
-    public static String format(String message, boolean includePrefix) {
-        if (includePrefix) {
+    public static String format(String message) {
+        if (ChatSystem.getInstance().getChatPrefixStatusValue()) {
             return addPrefix(colorize(message));
         } else {
             return colorize(message);

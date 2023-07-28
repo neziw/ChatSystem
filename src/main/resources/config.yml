@@ -1,6 +1,7 @@
 chatStatusValue: true
 chatPremiumStatusValue: false
-#Command
+chatPrefixStatusValue: true
+chatPrefix:  "§8[§4§l!§8] "
 chatNoPerm: "&7Nie posiadasz uprawnienia &8(&6system.chat&8)"
 chatAlreadyEnabled: "&7Chat jest już &awłączony"
 chatAlreadyDisabled: "&7Chat jest już &cwyłączony"
@@ -9,7 +10,6 @@ chatSetOff: "          &8*&7*&8*  &7Chat został &c&nwyłączony&8  *&7*&8*     
 chatSetOn: "          &8*&7*&8* &7Chat został &a&nwłączony&8  *&7*&8*          "
 chatSetClear: "          &8*&7*&8*  &7Chat został &6wyczyszczony&8  *&7*&8*          "
 chatSetPremium: "          &8*&7*&8*  &7Chat wyłączonie dla &8(&dpremium&8)&8 *&7*&8*          "
-#Event
 chatManagerCurrentlyOffline: "&7Chat aktualnie jest dostępny wyłącznie dla &8(&dpremium&8)!"
 chatOffline: "&7Chat aktualnie jest &c&nwyłączony&c!"
 chatLastMessage: "&cNie wysyłaj tej samej wiadomości pod rząd!"

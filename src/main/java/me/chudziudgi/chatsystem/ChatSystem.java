@@ -22,6 +22,9 @@ public class ChatSystem extends JavaPlugin {
     public String getChatNoPermPremium() {
         return getConfig().getString("chatNoPermPremium");
     }
+    public String getChatPrefix() {
+        return getConfig().getString("chatPrefix");
+    }
     public String getChatManagerCurrentlyOffline() {
         return getConfig().getString("chatManagerCurrentlyOffline");
     }
@@ -76,6 +79,9 @@ public class ChatSystem extends JavaPlugin {
 
     public boolean getChatStatusValue() {
         return getConfig().getBoolean("chatStatusValue", true);
+    }
+    public boolean getChatPrefixStatusValue() {
+        return getConfig().getBoolean("chatPrefixStatusValue", true);
     }
 
     public void setChatStatusValue(boolean value) {
