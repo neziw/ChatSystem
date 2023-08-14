@@ -1,89 +1,94 @@
 package me.chudziudgi.chatsystem.command;
 
-import me.chudziudgi.chatsystem.ChatSystem;
-import me.chudziudgi.chatsystem.ColorsUtils;
+import me.chudziudgi.chatsystem.Config;
+import me.chudziudgi.chatsystem.util.ColorsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.command.TabExecutor;
 
-public class ChatCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
+public class ChatCommand implements TabExecutor {
+
+    private final Config config;
+
+    public ChatCommand(final Config config) {
+        this.config = config;
+    }
+
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player player) {
-            if (!player.hasPermission("system.chat")) {
-                player.sendMessage(ColorsUtils.format(ChatSystem.getInstance().getChatNoPerm()));
+    public boolean onCommand(final CommandSender sender, final Command c, final String label, final String[] args) {
+        if (sender.hasPermission("system.chat")) {
+            if (args.length != 1) {
+                this.sendMessage(sender, this.config.getChatWrongUse());
                 return true;
             }
-            if (command.getName().equalsIgnoreCase("chat")) {
-                if (args.length == 1) {
-                    if (args[0].equalsIgnoreCase("on")) {
-                        if (ChatSystem.getInstance().getChatStatusValue()) {
-                            player.sendMessage(ColorsUtils.format(ChatSystem.getInstance().getChatAlreadyEnabled()));
-                            return true;
-                        }
-                        ChatSystem.getInstance().setChatStatusValue(true);
-                        for (final Player all : Bukkit.getOnlinePlayers()) {
-                            for (int i = 0; i < 100; i++) {
-                                all.sendMessage(" ");
-                            }
-                            all.sendMessage(ColorsUtils.format(ChatSystem.getInstance().getChatSetOn()));
-                            all.sendMessage(ColorsUtils.format(" "));
-                        }
-                    } else if (args[0].equalsIgnoreCase("off")) {
-                        if (!ChatSystem.getInstance().getChatStatusValue()) {
-                            player.sendMessage(ColorsUtils.format(ChatSystem.getInstance().getChatAlreadyDisabled()));
-                            return true;
-                        }
-                        ChatSystem.getInstance().setChatStatusValue(false);
-                        for (final Player all : Bukkit.getOnlinePlayers()) {
-                            for (int i = 0; i < 10; i++) {
-                                all.sendMessage(" ");
-                            }
-                            all.sendMessage(ColorsUtils.format(ChatSystem.getInstance().getChatSetOff()));
-                            all.sendMessage(ColorsUtils.format(" "));
-                        }
-                    } else if (args[0].equalsIgnoreCase("clear")) {
-                        for (final Player all : Bukkit.getOnlinePlayers()) {
-                            for (int i = 0; i < 100; i++) {
-                                all.sendMessage(" ");
-                            }
-                            all.sendMessage(ColorsUtils.format(ChatSystem.getInstance().getChatSetClear()));
-                            all.sendMessage(ColorsUtils.format(" "));
-                        }
-                    } else if (args[0].equalsIgnoreCase("premium")) {
-                        if (ChatSystem.getInstance().getChatPremiumStatusValue()) {
-                            ChatSystem.getInstance().setChatStatusValue(true);
-                            ChatSystem.getInstance().setChatPremiumStatusValue(false);
-                            for (final Player all : Bukkit.getOnlinePlayers()) {
-                                for (int i = 0; i < 10; i++) {
-                                    all.sendMessage(" ");
-                                }
-                                all.sendMessage(ColorsUtils.format(ChatSystem.getInstance().getChatSetPremium()));
-                                all.sendMessage(ColorsUtils.format(" "));
-                            }
-                        } else {
-                            ChatSystem.getInstance().setChatStatusValue(true);
-                            ChatSystem.getInstance().setChatPremiumStatusValue(true);
-                            for (final Player all : Bukkit.getOnlinePlayers()) {
-                                for (int i = 0; i < 10; i++) {
-                                    all.sendMessage(" ");
-                                }
-                                all.sendMessage(ColorsUtils.format(ChatSystem.getInstance().getChatSetPremium()));
-                                all.sendMessage(ColorsUtils.format(" "));
-                            }
-                        }
-                    } else {
-                        player.sendMessage(ColorsUtils.format(ChatSystem.getInstance().getChatWrongUse()));
-                    }
-                    return true;
+            if (args[0].equals("on")) {
+                if (this.config.isChatStatusValue()) {
+                    this.sendMessage(sender, this.config.getChatAlreadyEnabled());
                 } else {
-                    player.sendMessage(ColorsUtils.format(ChatSystem.getInstance().getChatWrongUse()));
+                    this.config.setChatStatusValue(true);
+                    Bukkit.getOnlinePlayers().forEach(player -> this.sendMessage(player, this.config.getChatSetOn()));
                 }
+            } else if (args[0].equals("off")) {
+                if (!this.config.isChatStatusValue()) {
+                    this.sendMessage(sender, this.config.getChatAlreadyDisabled());
+                } else {
+                    this.config.setChatStatusValue(false);
+                    Bukkit.getOnlinePlayers().forEach(player -> this.sendMessage(player, this.config.getChatSetOff()));
+                }
+            } else if (args[0].equals("clear")) {
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    for (int i = 0; i < 100; i++) {
+                        this.sendMessage(player, " ");
+                    }
+                    this.sendMessage(player, this.config.getChatSetClear());
+                    this.sendMessage(player, " ");
+                });
+            } else if (args[0].equals("premium")) {
+                if (this.config.isChatPremiumStatusValue()) {
+                    this.config.setChatStatusValue(true);
+                    this.config.setChatPremiumStatusValue(false);
+                    Bukkit.getOnlinePlayers().forEach(player -> this.sendMessage(player, this.config.getChatSetPremium()));
+                } else {
+                    this.config.setChatStatusValue(true);
+                    this.config.setChatPremiumStatusValue(true);
+                    Bukkit.getOnlinePlayers().forEach(player -> this.sendMessage(player, this.config.getChatSetPremium()));
+                }
+            } else {
+                this.sendMessage(sender, this.config.getChatWrongUse());
             }
             return true;
         }
-        return false;
+        this.sendMessage(sender, this.config.getChatNoPerm());
+        return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(final CommandSender sender, final Command c, final String label, final String[] args) {
+        if (args.length != 1 || !sender.hasPermission("system.chat")) return Collections.emptyList();
+        final List<String> matches = new ArrayList<>();
+        final String search = args[0].toLowerCase(Locale.ROOT);
+        if ("on".startsWith(search)) {
+            matches.add("on");
+        }
+        if ("off".startsWith(search)) {
+            matches.add("off");
+        }
+        if ("clear".startsWith(search)) {
+            matches.add("clear");
+        }
+        if ("premium".startsWith(search)) {
+            matches.add("premium");
+        }
+        return matches;
+    }
+
+    private void sendMessage(final CommandSender sender, final String message) {
+        sender.sendMessage(ColorsUtil.colorize(message));
     }
 }

@@ -1,91 +1,46 @@
 package me.chudziudgi.chatsystem;
 
+import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import me.chudziudgi.chatsystem.command.ChatCommand;
-import me.chudziudgi.chatsystem.listener.ChatManager;
+import me.chudziudgi.chatsystem.listener.ChatListener;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
+import java.io.File;
 
-public class ChatSystem extends JavaPlugin {
+public final class ChatSystem extends JavaPlugin {
+
     private static ChatSystem instance;
+    private Config configuration;
+
+    @Override
+    public void onEnable() {
+        instance = this;
+        this.configuration = ConfigManager.create(Config.class, (it -> {
+            it.withConfigurer(new YamlBukkitConfigurer());
+            it.withBindFile(new File(this.getDataFolder(), "config.yml"));
+            it.withRemoveOrphans(true);
+            it.saveDefaults();
+            it.load(true);
+        }));
+        final ChatCommand command = new ChatCommand(this.configuration);
+        this.getCommand("chat").setExecutor(command);
+        this.getCommand("chat").setTabCompleter(command);
+        this.getServer().getPluginManager().registerEvents(new ChatListener(this.configuration), this);
+    }
+
+    @Override
+    public void onDisable() {
+        instance = null;
+        HandlerList.unregisterAll(this);
+    }
 
     public static ChatSystem getInstance() {
         return instance;
     }
-    @Override
-    public void onEnable() {
-        instance = this;
-        saveDefaultConfig();
-        getCommand("chat").setExecutor(new ChatCommand());
-        getServer().getPluginManager().registerEvents(new ChatManager(), this);
-    }
-    public String getChatNoPermPremium() {
-        return getConfig().getString("chatNoPermPremium");
-    }
-    public String getChatPrefix() {
-        return getConfig().getString("chatPrefix");
-    }
-    public String getChatManagerCurrentlyOffline() {
-        return getConfig().getString("chatManagerCurrentlyOffline");
-    }
-    public String getChatWrongMessage() {
-        return getConfig().getString("chatWrongMessage");
-    }
-    public String getChatLastMessage() {
-        return getConfig().getString("chatLastMessage");
-    }
-    public String getChatNoPerm() {
-        return getConfig().getString("chatNoPerm");
-    }
 
-    public String getChatAlreadyEnabled() {
-        return getConfig().getString("chatAlreadyEnabled");
-    }
-
-    public String getChatAlreadyDisabled() {
-        return getConfig().getString("chatAlreadyDisabled");
-    }
-    public String getChatSetOff() {
-        return getConfig().getString("chatSetOff");
-    }
-    public String getChatSetOn() {
-        return getConfig().getString("chatSetOn");
-    }
-    public String getChatSetClear() {
-        return getConfig().getString("chatSetClear");
-    }
-    public String getChatSetPremium() {
-        return getConfig().getString("chatSetPremium");
-    }
-    public String getChatWrongUse() {
-        return getConfig().getString("chatWrongUse");
-    }
-    public List<Character> getChatCharacterList() {
-        return getConfig().getCharacterList("chatCharacterList");
-    }
-
-    public List<String> getChatBlockedWordList() {
-        return getConfig().getStringList("getChatBlockedWordList");
-    }
-
-    public boolean getChatPremiumStatusValue() {
-        return getConfig().getBoolean("chatPremiumStatusValue", true);
-    }
-
-    public void setChatPremiumStatusValue(boolean value) {
-        getConfig().set("chatPremiumStatusValue", value);
-        saveConfig();
-    }
-
-    public boolean getChatStatusValue() {
-        return getConfig().getBoolean("chatStatusValue", true);
-    }
-    public boolean getChatPrefixStatusValue() {
-        return getConfig().getBoolean("chatPrefixStatusValue", true);
-    }
-
-    public void setChatStatusValue(boolean value) {
-        getConfig().set("chatStatusValue", value);
-        saveConfig();
+    public Config getConfiguration() {
+        return this.configuration;
     }
 }

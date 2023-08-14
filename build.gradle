@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'me.chudziudgi'
@@ -15,10 +16,15 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven {
+        name = "okaeri-repo"
+        url = "https://storehouse.okaeri.eu/repository/maven-public/"
+    }
 }
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
+    implementation "eu.okaeri:okaeri-configs-yaml-bukkit:5.0.0-beta.5"
 }
 
 def targetJavaVersion = 17
@@ -44,4 +50,17 @@ processResources {
     filesMatching('plugin.yml') {
         expand props
     }
+}
+
+shadowJar {
+    archiveFileName.set('ChatSystem.jar')
+    exclude(
+            'org/intellij/lang/annotations/**',
+            'org/jetbrains/annotations/**',
+            'org/checkerframework/**',
+            'META-INF/**',
+            'javax/**'
+    )
+    mergeServiceFiles()
+    relocate('eu.okaeri.configs', 'me.chudziudgi.chatsystem.libs')
 }
